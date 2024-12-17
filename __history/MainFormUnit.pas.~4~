@@ -1,0 +1,156 @@
+unit MainFormUnit;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, CitizensUnit, RequestsUnit, ComplaintsUnit;
+
+type
+  TMainForm = class(TForm)
+    btnCitizens: TButton;
+    btnDocuments: TButton;
+    btnComplaints: TButton;
+    btnReports: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure btnCitizensClick(Sender: TObject);
+    procedure btnDocumentsClick(Sender: TObject);
+    procedure btnReportsClick(Sender: TObject);
+    procedure btnComplaintsClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainForm: TMainForm;
+  ComplaintsForm: TComplaintsForm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  try
+    Caption := 'القائمة الرئيسية';
+    Position := poScreenCenter;
+    BiDiMode := bdRightToLeft;
+    
+    // Set form properties
+    Width := 800;
+    Height := 600;
+    
+    // Set global font for better Arabic support
+    Font.Name := 'Tahoma';
+    Font.Size := 10;
+    Font.Charset := DEFAULT_CHARSET;
+
+    // Create and position buttons
+    if not Assigned(btnCitizens) then
+    begin
+      btnCitizens := TButton.Create(Self);
+      with btnCitizens do
+      begin
+        Parent := Self;
+        Left := 300;
+        Top := 50;
+        Width := 200;
+        Height := 80;
+        Caption := 'إدارة المواطنين';
+        Font.Size := 12;
+        Font.Name := 'Tahoma';
+        OnClick := btnCitizensClick;
+      end;
+    end;
+    
+    if not Assigned(btnDocuments) then
+    begin
+      btnDocuments := TButton.Create(Self);
+      with btnDocuments do
+      begin
+        Parent := Self;
+        Left := 300;
+        Top := 150;
+        Width := 200;
+        Height := 80;
+        Caption := 'طلبات الوثائق';
+        Font.Size := 12;
+        Font.Name := 'Tahoma';
+        OnClick := btnDocumentsClick;
+      end;
+    end;
+    
+    if not Assigned(btnComplaints) then
+    begin
+      btnComplaints := TButton.Create(Self);
+      with btnComplaints do
+      begin
+        Parent := Self;
+        Left := 300;
+        Top := 250;
+        Width := 200;
+        Height := 80;
+        Caption := 'الشكاوى';
+        Font.Size := 12;
+        Font.Name := 'Tahoma';
+        OnClick := btnComplaintsClick;
+      end;
+    end;
+    
+    if not Assigned(btnReports) then
+    begin
+      btnReports := TButton.Create(Self);
+      with btnReports do
+      begin
+        Parent := Self;
+        Left := 300;
+        Top := 350;
+        Width := 200;
+        Height := 80;
+        Caption := 'التقارير';
+        Font.Size := 12;
+        Font.Name := 'Tahoma';
+        OnClick := btnReportsClick;
+      end;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('خطأ في تهيئة النافذة: ' + E.Message);
+  end;
+end;
+
+procedure TMainForm.btnCitizensClick(Sender: TObject);
+begin
+  if not Assigned(CitizensForm) then
+    CitizensForm := TCitizensForm.Create(Application);
+  CitizensForm.Show;
+end;
+
+procedure TMainForm.btnDocumentsClick(Sender: TObject);
+begin
+  if not Assigned(RequestsForm) then
+    RequestsForm := TRequestsForm.Create(Application);
+  RequestsForm.Show;
+end;
+
+procedure TMainForm.btnReportsClick(Sender: TObject);
+begin
+  if not Assigned(RequestsForm) then
+    RequestsForm := TRequestsForm.Create(Application);
+  RequestsForm.Show;
+end;
+
+procedure TMainForm.btnComplaintsClick(Sender: TObject);
+begin
+  try
+    ComplaintsForm := TComplaintsForm.Create(Application);
+    ComplaintsForm.ShowModal;
+  finally
+    if Assigned(ComplaintsForm) then
+      ComplaintsForm.Free;
+  end;
+end;
+
+end.

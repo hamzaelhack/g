@@ -1,0 +1,227 @@
+object CitizensForm: TCitizensForm
+  Left = 0
+  Top = 0
+  Caption = 'إدارة بيانات المواطنين'
+  ClientHeight = 571
+  ClientWidth = 794
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Position = poScreenCenter
+  BiDiMode = bdRightToLeft
+  ParentBiDiMode = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 14
+  object pnlSearch: TPanel
+    Left = 0
+    Top = 0
+    Width = 794
+    Height = 89
+    Align = alTop
+    TabOrder = 0
+    object lblSearchId: TLabel
+      Left = 680
+      Top = 16
+      Width = 89
+      Height = 14
+      Caption = 'بحث برقم التعريف:'
+    end
+    object lblSearchName: TLabel
+      Left = 680
+      Top = 48
+      Width = 71
+      Height = 14
+      Caption = 'بحث بالاسم:'
+    end
+    object edtSearchId: TEdit
+      Left = 520
+      Top = 13
+      Width = 145
+      Height = 22
+      TabOrder = 0
+    end
+    object edtSearchName: TEdit
+      Left = 520
+      Top = 45
+      Width = 145
+      Height = 22
+      TabOrder = 1
+    end
+    object btnSearch: TButton
+      Left = 24
+      Top = 13
+      Width = 75
+      Height = 54
+      Caption = 'بحث'
+      TabOrder = 2
+      OnClick = btnSearchClick
+    end
+  end
+  object pnlEdit: TPanel
+    Left = 0
+    Top = 401
+    Width = 794
+    Height = 170
+    Align = alBottom
+    TabOrder = 1
+    object lblId: TLabel
+      Left = 680
+      Top = 16
+      Width = 71
+      Height = 14
+      Caption = 'رقم التعريف:'
+    end
+    object lblName: TLabel
+      Left = 680
+      Top = 48
+      Width = 36
+      Height = 14
+      Caption = 'الاسم:'
+    end
+    object lblPhone: TLabel
+      Left = 680
+      Top = 80
+      Width = 37
+      Height = 14
+      Caption = 'الهاتف:'
+    end
+    object lblAddress: TLabel
+      Left = 680
+      Top = 112
+      Width = 41
+      Height = 14
+      Caption = 'العنوان:'
+    end
+    object edtId: TEdit
+      Left = 520
+      Top = 13
+      Width = 145
+      Height = 22
+      TabOrder = 0
+    end
+    object edtName: TEdit
+      Left = 520
+      Top = 45
+      Width = 145
+      Height = 22
+      TabOrder = 1
+    end
+    object edtPhone: TEdit
+      Left = 520
+      Top = 77
+      Width = 145
+      Height = 22
+      TabOrder = 2
+    end
+    object edtAddress: TEdit
+      Left = 520
+      Top = 109
+      Width = 145
+      Height = 22
+      TabOrder = 3
+    end
+    object btnAdd: TButton
+      Left = 408
+      Top = 13
+      Width = 75
+      Height = 118
+      Caption = 'إضافة'
+      TabOrder = 4
+      OnClick = btnAddClick
+    end
+    object btnEdit: TButton
+      Left = 312
+      Top = 13
+      Width = 75
+      Height = 118
+      Caption = 'تعديل'
+      TabOrder = 5
+      OnClick = btnEditClick
+    end
+    object btnDelete: TButton
+      Left = 216
+      Top = 13
+      Width = 75
+      Height = 118
+      Caption = 'حذف'
+      TabOrder = 6
+      OnClick = btnDeleteClick
+    end
+    object btnClear: TButton
+      Left = 120
+      Top = 13
+      Width = 75
+      Height = 118
+      Caption = 'مسح الحقول'
+      TabOrder = 7
+      OnClick = btnClearClick
+    end
+  end
+  object dbgCitizens: TDBGrid
+    Left = 0
+    Top = 89
+    Width = 794
+    Height = 312
+    Align = alClient
+    DataSource = dsCitizens
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    TabOrder = 2
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -12
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnCellClick = dbgCitizensCellClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'id'
+        Title.Caption = 'رقم التعريف'
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'name'
+        Title.Caption = 'الاسم'
+        Width = 200
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'phone'
+        Title.Caption = 'الهاتف'
+        Width = 150
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'address'
+        Title.Caption = 'العنوان'
+        Width = 300
+        Visible = True
+      end>
+  end
+  object ADOConnection: TADOConnection
+    LoginPrompt = False
+    Mode = cmShareDenyNone
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 40
+    Top = 184
+  end
+  object qryCitizens: TADOQuery
+    Connection = ADOConnection
+    Parameters = <>
+    Left = 40
+    Top = 248
+  end
+  object dsCitizens: TDataSource
+    DataSet = qryCitizens
+    Left = 40
+    Top = 312
+  end
+end

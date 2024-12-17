@@ -1,0 +1,74 @@
+﻿object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Caption = 'القائمة الرئيسية'
+  ClientHeight = 461
+  ClientWidth = 384
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Position = poScreenCenter
+  BiDiMode = bdRightToLeft
+  ParentBiDiMode = False
+  PixelsPerInch = 96
+  TextHeight = 14
+  object btnCitizens: TButton
+    Left = 50
+    Top = 50
+    Width = 300
+    Height = 80
+    Caption = 'إدارة بيانات المواطنين'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+  end
+  object btnDocuments: TButton
+    Left = 50
+    Top = 150
+    Width = 300
+    Height = 80
+    Caption = 'طلبات الوثائق'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+  end
+  object btnComplaints: TButton
+    Left = 50
+    Top = 250
+    Width = 300
+    Height = 80
+    Caption = 'إدارة الشكاوى'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+  end
+  object btnReports: TButton
+    Left = 50
+    Top = 350
+    Width = 300
+    Height = 80
+    Caption = 'إعداد تقارير'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+  end
+end

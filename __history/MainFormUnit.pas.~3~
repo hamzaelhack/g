@@ -1,0 +1,117 @@
+﻿unit MainFormUnit;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, CitizensUnit,
+  System.Actions, Vcl.ActnList, Vcl.ExtActns;
+
+type
+  TMainForm = class(TForm)
+    btnCitizens: TButton;
+    btnDocuments: TButton;
+    btnComplaints: TButton;
+    btnReports: TButton;
+    ActionList1: TActionList;
+    TabNextTab1: TNextTab;
+    procedure FormCreate(Sender: TObject);
+    procedure btnCitizensClick(Sender: TObject);
+    procedure Action1Execute(Sender: TObject);
+    procedure TabNextTab1AfterTabChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainForm: TMainForm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  // Set form properties
+  Caption := 'القائمة الرئيسية';
+  Position := poScreenCenter;
+  Width := 400;
+  Height := 500;
+  BiDiMode := bdRightToLeft;
+  
+  // Create Citizens Management button
+  btnCitizens := TButton.Create(Self);
+  with btnCitizens do
+  begin
+    Parent := Self;
+    Caption := 'إدارة بيانات المواطنين';
+    Left := 50;
+    Top := 50;
+    Width := 300;
+    Height := 80;
+    Font.Size := 12;
+    Font.Name := 'Tahoma';
+    OnClick := btnCitizensClick;
+  end;
+  
+  // Create Documents Requests button
+  btnDocuments := TButton.Create(Self);
+  with btnDocuments do
+  begin
+    Parent := Self;
+    Caption := 'طلبات الوثائق';
+    Left := 50;
+    Top := 150;
+    Width := 300;
+    Height := 80;
+    Font.Size := 12;
+    Font.Name := 'Tahoma';
+  end;
+  
+  // Create Complaints Management button
+  btnComplaints := TButton.Create(Self);
+  with btnComplaints do
+  begin
+    Parent := Self;
+    Caption := 'إدارة الشكاوى';
+    Left := 50;
+    Top := 250;
+    Width := 300;
+    Height := 80;
+    Font.Size := 12;
+    Font.Name := 'Tahoma';
+  end;
+  
+  // Create Reports button
+  btnReports := TButton.Create(Self);
+  with btnReports do
+  begin
+    Parent := Self;
+    Caption := 'إعداد تقارير';
+    Left := 50;
+    Top := 350;
+    Width := 300;
+    Height := 80;
+    Font.Size := 12;
+    Font.Name := 'Tahoma';
+  end;
+end;
+
+begin
+
+end;
+
+rocedure TMainForm.btnCitizensClick(Sender: TObject);
+begin
+  CitizensForm := TCitizensForm.Create(Application);
+  CitizensForm.Show;
+end;
+
+eprocedure TMainForm.TabNextTab1AfterTabChange(Sender: TObject);
+begin
+
+end;
+
+nd.

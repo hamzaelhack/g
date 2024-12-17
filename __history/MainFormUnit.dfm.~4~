@@ -1,0 +1,75 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Caption = 'Menu Principal'
+  ClientHeight = 561
+  ClientWidth = 784
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  BiDiMode = bdLeftToRight
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  TextHeight = 14
+  object btnCitizens: TButton
+    Left = 300
+    Top = 50
+    Width = 200
+    Height = 80
+    Caption = 'Gestion des Citoyens'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    OnClick = btnCitizensClick
+  end
+  object btnDocuments: TButton
+    Left = 300
+    Top = 150
+    Width = 200
+    Height = 80
+    Caption = 'Demandes de Documents'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    OnClick = btnDocumentsClick
+  end
+  object btnComplaints: TButton
+    Left = 300
+    Top = 250
+    Width = 200
+    Height = 80
+    Caption = 'Plaintes'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+  end
+  object btnReports: TButton
+    Left = 300
+    Top = 350
+    Width = 200
+    Height = 80
+    Caption = 'Rapports'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+  end
+end

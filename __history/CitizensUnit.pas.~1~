@@ -1,0 +1,233 @@
+unit CitizensUnit;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Grids,
+  Vcl.DBGrids, Data.DB, Data.Win.ADODB;
+
+type
+  TCitizensForm = class(TForm)
+    pnlSearch: TPanel;
+    pnlEdit: TPanel;
+    edtSearchId: TEdit;
+    edtSearchName: TEdit;
+    lblSearchId: TLabel;
+    lblSearchName: TLabel;
+    btnSearch: TButton;
+    dbgCitizens: TDBGrid;
+    edtId: TEdit;
+    edtName: TEdit;
+    edtPhone: TEdit;
+    edtAddress: TEdit;
+    lblId: TLabel;
+    lblName: TLabel;
+    lblPhone: TLabel;
+    lblAddress: TLabel;
+    btnAdd: TButton;
+    btnEdit: TButton;
+    btnDelete: TButton;
+    btnClear: TButton;
+    ADOConnection: TADOConnection;
+    qryCitizens: TADOQuery;
+    dsCitizens: TDataSource;
+    procedure FormCreate(Sender: TObject);
+    procedure btnSearchClick(Sender: TObject);
+    procedure btnAddClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure btnClearClick(Sender: TObject);
+    procedure dbgCitizensCellClick(Column: TColumn);
+  private
+    procedure InitializeDatabase;
+    procedure ClearFields;
+    procedure LoadCitizen(AId: Integer);
+  public
+    { Public declarations }
+  end;
+
+var
+  CitizensForm: TCitizensForm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TCitizensForm.FormCreate(Sender: TObject);
+begin
+  Caption := 'إدارة بيانات المواطنين';
+  Position := poScreenCenter;
+  BiDiMode := bdRightToLeft;
+  
+  InitializeDatabase;
+  
+  // Configure the grid query
+  qryCitizens.SQL.Text := 'SELECT * FROM citizens ORDER BY id';
+  qryCitizens.Open;
+end;
+
+procedure TCitizensForm.InitializeDatabase;
+begin
+  // Configure ADO connection
+  ADOConnection.ConnectionString := 
+    'Provider=Microsoft.Jet.OLEDB.4.0;' +
+    'Data Source=' + ExtractFilePath(Application.ExeName) + 'citizens.mdb;' +
+    'Persist Security Info=False';
+  ADOConnection.LoginPrompt := False;
+  ADOConnection.Connected := True;
+
+  // Create citizens table if not exists
+  ADOConnection.Execute(
+    'CREATE TABLE citizens (' +
+    'id INTEGER PRIMARY KEY,' +
+    'name TEXT(50) NOT NULL,' +
+    'phone TEXT(20),' +
+    'address TEXT(100))'
+  );
+end;
+
+procedure TCitizensForm.btnSearchClick(Sender: TObject);
+var
+  sql: string;
+begin
+  sql := 'SELECT * FROM citizens WHERE 1=1';
+  
+  if edtSearchId.Text <> '' then
+    sql := sql + ' AND id = ' + edtSearchId.Text;
+    
+  if edtSearchName.Text <> '' then
+    sql := sql + ' AND name LIKE ''%' + edtSearchName.Text + '%''';
+    
+  sql := sql + ' ORDER BY id';
+  
+  qryCitizens.Close;
+  qryCitizens.SQL.Text := sql;
+  qryCitizens.Open;
+end;
+
+procedure TCitizensForm.btnAddClick(Sender: TObject);
+begin
+  if (edtId.Text = '') or (edtName.Text = '') then
+  begin
+    MessageDlg('الرجاء إدخال رقم التعريف والاسم', mtWarning, [mbOK], 0);
+    Exit;
+  end;
+
+  try
+    qryCitizens.Close;
+    qryCitizens.SQL.Text := 
+      'INSERT INTO citizens (id, name, phone, address) VALUES (:id, :name, :phone, :address)';
+    qryCitizens.Parameters.ParamByName('id').Value := StrToInt(edtId.Text);
+    qryCitizens.Parameters.ParamByName('name').Value := edtName.Text;
+    qryCitizens.Parameters.ParamByName('phone').Value := edtPhone.Text;
+    qryCitizens.Parameters.ParamByName('address').Value := edtAddress.Text;
+    qryCitizens.ExecSQL;
+    
+    MessageDlg('تمت إضافة المواطن بنجاح', mtInformation, [mbOK], 0);
+    ClearFields;
+    btnSearchClick(nil);
+  except
+    on E: Exception do
+      MessageDlg('خطأ في إضافة المواطن: ' + E.Message, mtError, [mbOK], 0);
+  end;
+end;
+
+procedure TCitizensForm.btnEditClick(Sender: TObject);
+begin
+  if (edtId.Text = '') or (edtName.Text = '') then
+  begin
+    MessageDlg('الرجاء إدخال رقم التعريف والاسم', mtWarning, [mbOK], 0);
+    Exit;
+  end;
+
+  try
+    qryCitizens.Close;
+    qryCitizens.SQL.Text :=
+      'UPDATE citizens SET name = :name, phone = :phone, address = :address WHERE id = :id';
+    qryCitizens.Parameters.ParamByName('name').Value := edtName.Text;
+    qryCitizens.Parameters.ParamByName('phone').Value := edtPhone.Text;
+    qryCitizens.Parameters.ParamByName('address').Value := edtAddress.Text;
+    qryCitizens.Parameters.ParamByName('id').Value := StrToInt(edtId.Text);
+    qryCitizens.ExecSQL;
+    
+    MessageDlg('تم تحديث بيانات المواطن بنجاح', mtInformation, [mbOK], 0);
+    ClearFields;
+    btnSearchClick(nil);
+  except
+    on E: Exception do
+      MessageDlg('خطأ في تحديث بيانات المواطن: ' + E.Message, mtError, [mbOK], 0);
+  end;
+end;
+
+procedure TCitizensForm.btnDeleteClick(Sender: TObject);
+begin
+  if edtId.Text = '' then
+  begin
+    MessageDlg('الرجاء تحديد المواطن المراد حذفه', mtWarning, [mbOK], 0);
+    Exit;
+  end;
+
+  if MessageDlg('هل أنت متأكد من حذف هذا المواطن؟', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    try
+      qryCitizens.Close;
+      qryCitizens.SQL.Text := 'DELETE FROM citizens WHERE id = :id';
+      qryCitizens.Parameters.ParamByName('id').Value := StrToInt(edtId.Text);
+      qryCitizens.ExecSQL;
+      
+      MessageDlg('تم حذف المواطن بنجاح', mtInformation, [mbOK], 0);
+      ClearFields;
+      btnSearchClick(nil);
+    except
+      on E: Exception do
+        MessageDlg('خطأ في حذف المواطن: ' + E.Message, mtError, [mbOK], 0);
+    end;
+  end;
+end;
+
+procedure TCitizensForm.btnClearClick(Sender: TObject);
+begin
+  ClearFields;
+end;
+
+procedure TCitizensForm.ClearFields;
+begin
+  edtId.Clear;
+  edtName.Clear;
+  edtPhone.Clear;
+  edtAddress.Clear;
+  edtSearchId.Clear;
+  edtSearchName.Clear;
+end;
+
+procedure TCitizensForm.dbgCitizensCellClick(Column: TColumn);
+begin
+  if not qryCitizens.IsEmpty then
+    LoadCitizen(qryCitizens.FieldByName('id').AsInteger);
+end;
+
+procedure TCitizensForm.LoadCitizen(AId: Integer);
+var
+  qry: TADOQuery;
+begin
+  qry := TADOQuery.Create(nil);
+  try
+    qry.Connection := ADOConnection;
+    qry.SQL.Text := 'SELECT * FROM citizens WHERE id = :id';
+    qry.Parameters.ParamByName('id').Value := AId;
+    qry.Open;
+    
+    if not qry.IsEmpty then
+    begin
+      edtId.Text := qry.FieldByName('id').AsString;
+      edtName.Text := qry.FieldByName('name').AsString;
+      edtPhone.Text := qry.FieldByName('phone').AsString;
+      edtAddress.Text := qry.FieldByName('address').AsString;
+    end;
+  finally
+    qry.Free;
+  end;
+end;
+
+end.
